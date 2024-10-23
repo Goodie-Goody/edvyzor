@@ -1,7 +1,8 @@
 ## Early Detection System for WAEC Scores
 
 ### Overview
-Welcome to the Early Detection System for WAEC Scores! This proof of concept/demonstration project leverages Supabase, Jupyter Notebook, Streamlit, and Power BI to manage, analyze, and visualize data seamlessly. Note: The data used here may not be representative of real-world scenarios for Nigerian schools.
+Welcome to the Early Detection System for WAEC Scores! This proof of concept/demonstration project leverages Supabase, Jupyter Notebook, Streamlit, and Power BI to manage, analyze, and visualize data seamlessly. 
+**Note:** The data used here may not be representative of real-world scenarios for Nigerian schools.
 
 ### Architecture
 - **Supabase**: Acts as the primary database to store and manage school data.
