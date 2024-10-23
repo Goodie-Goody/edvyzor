@@ -1,7 +1,3 @@
-Certainly! Here is the revised write-up with the additional details about Fly.io's cost-effectiveness and Supabase's generous free tier, emphasizing how these aspects benefit Nigerian schools:
-
----
-
 ## Early Detection System for WAEC Scores
 
 ### Overview
