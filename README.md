@@ -64,7 +64,7 @@ Welcome to the Early Detection System for WAEC Scores! This proof of concept/dem
 
 #### Model Training:
 - **Jupyter Notebook**: The notebook fetched data from Supabase using the Supabase client. The role service key was used here to bypass RLS policies, ensuring unrestricted data access.
-- **Training**: The machine learning model was then trained using this data. [Access the Jupyter Notebook here](#).
+- **Training**: The machine learning model was then trained using this data. [Access the Jupyter Notebook here](predictive_models.ipynb).
 
 #### Real-Time Predictions:
 - **Streamlit Integration**: The trained model was deployed on Streamlit for real-time predictions. Users interact with the app, make predictions, and store results back into Supabase.
