@@ -1,0 +1,238 @@
+_______________
+Data Dictionary
+---------------
+
+Attributes for both student-mat.csv (Math course) and student-por.csv (Portuguese language course) datasets:
+
+
+1. student_id: INT
+	Description: Unique identifier for each student.
+	Example: 1, 2, 3
+
+2. school: TEXT
+	Description: Student's school.
+	Values: "GP" - Gabriel Pereira, "MS" - Mousinho da Silveira
+
+3. sex: TEXT
+	Description: Student's sex.
+	Values: "F" - Female, "M" - Male
+
+4. age: INT
+	Description: Student's age.
+	Range: 15 to 22
+
+5. address: TEXT
+	Description: Student's home address type.
+	Values: "U" - Urban, "R" - Rural
+
+6. famsize: TEXT
+	Description: Family size.
+	Values: "LE3" - Less or equal to 3, "GT3" - Greater than 3
+
+7. pstatus: TEXT
+	Description: Parent's cohabitation status.
+	Values: "T" - Living together, "A" - Apart
+
+8. medu: INT
+	Description: Mother's education.
+	Values: 0 - None, 1 - Primary (4th grade), 2 - 5th to 9th grade, 3 - Secondary, 4 - Higher
+
+9. fedu: INT
+	Description: Father's education.
+	Values: 0 - None, 1 - Primary (4th grade), 2 - 5th to 9th grade, 3 - Secondary, 4 - Higher
+
+10. mjob: TEXT
+	Description: Mother's job.
+	Values: "teacher", "health", "services", "at_home", "other"
+
+11. fjob: TEXT
+	Description: Father's job.
+	Values: "teacher", "health", "services", "at_home", "other"
+
+12. reason: TEXT
+	Description: Reason to choose this school.
+	Values: "home", "reputation", "course", "other"
+
+13. guardian: TEXT
+	Description: Student's guardian.
+	Values: "mother", "father", "other"
+
+14. traveltime: INT
+ 	Description: Home to school travel time.
+	Values: 1 - <15 min, 2 - 15 to 30 min, 3 - 30 min to 1 hour, 4 - >1 hour
+
+15. studytime: INT
+	Description: Weekly study time.
+	Values: 1 - <2 hours, 2 - 2 to 5 hours, 3 - 5 to 10 hours, 4 - >10 hours
+
+16. failures: INT
+	Description: Number of past class failures.
+	Values: n if 1<=n<3, else 4
+
+17. schoolsup: TEXT
+	Description: Extra educational support.
+	Values: "yes", "no"
+
+18. famsup: TEXT
+	Description: Family educational support.
+	Values: "yes", "no"
+
+19. paid: TEXT
+	Description: Extra paid classes within the course subject.
+	Values: "yes", "no"
+
+20. activities: TEXT
+	Description: Extra-curricular activities.
+	Values: "yes", "no"
+
+21. nursery: TEXT
+	Description: Attended nursery school.
+	Values: "yes", "no"
+
+22. higher: TEXT
+	Description: Wants to take higher education.
+	Values: "yes", "no"
+
+23. internet: TEXT
+	Description: Internet access at home.
+	Values: "yes", "no"
+
+24. romantic: TEXT
+	Description: With a romantic relationship.
+	Values: "yes", "no"
+
+25. famrel: INT
+	Description: Quality of family relationships.
+	Range: 1 - Very bad to 5 - Excellent
+
+26. freetime: INT
+	Description: Free time after school.
+	Range: 1 - Very low to 5 - Very high
+
+27. goout: INT
+	Description: Going out with friends.
+	Range: 1 - Very low to 5 - Very high
+
+28. health: INT
+	Description: Current health status.
+	Range: 1 - Very bad to 5 - Very good
+
+29. absences: INT
+	Description: Number of school absences.
+	Range: 0 to 93
+
+_________________________________
+Grades Related to Course Subjects
+---------------------------------
+
+
+1. mat_absences: INT
+	Description: Number of absences in Math.
+	Example: 5, 2, 0
+
+2. mat_ss2_3rd: INT
+	Description: Math score for SS2 3rd term.
+	Example: 55, 78, 67
+
+3. mat_ss3_1st: INT
+	Description: Math score for SS3 1st term.
+	Example: 60, 75, 83
+
+4. mat_ss3_2nd: INT
+	Description: Math score for SS3 2nd term.
+	Example: 70, 88, 79
+
+5. eng_absences: INT
+	Description: Number of absences in English.
+	Example: 3, 4, 1
+
+6. eng_ss2_3rd: INT
+	Description: English score for SS2 3rd term.
+	Example: 80, 65, 90
+
+7. eng_ss3_1st: INT
+	Description: English score for SS3 1st term.
+	Example: 70, 85, 78
+
+8. eng_ss3_2nd: INT
+	Description: English score for SS3 2nd term.
+	Example: 88, 92, 79
+
+9. csubj1_ss2_3rd: INT
+	Description: Core subject 1 score for SS2 3rd term. Weighted: 60% English, 40% Math.
+	Example: 68, 72, 78
+
+10. csubj1_ss3_1st: INT
+	Description: Core subject 1 score for SS3 1st term. Weighted: 50% English, 50% Math.
+	Example: 65, 80, 80
+
+11. csubj1_ss3_2nd: INT
+	Description: Core subject 1 score for SS3 2nd term. Weighted: 40% English, 60% Math.
+	Example: 79, 90, 79
+
+12. csubj1_absences: INT
+	Description: Core subject 1 absences. Weighted: 60% English absences, 40% Math absences.
+	Example: 4, 3, 1
+
+13. csubj2_ss2_3rd: INT
+	Description: Core subject 2 score for SS2 3rd term. Weighted: 60% English, 40% Math.
+	Example: 68, 72, 78
+
+14. csubj2_ss3_1st: INT
+	Description: Core subject 2 score for SS3 1st term. Weighted: 50% English, 50% Math.
+	Example: 65, 80, 80
+
+15. csubj2_ss3_2nd: INT
+	Description: Core subject 2 score for SS3 2nd term. Weighted: 40% English, 60% Math.
+	Example: 79, 90, 79
+
+16. csubj2_absences: INT
+	Description: Core subject 2 absences. Weighted: 50% English absences, 50% Math absences.
+	Example: 4, 3, 1
+
+17. csubj3_ss2_3rd: INT
+	Description: Core subject 3 score for SS2 3rd term. Weighted: 60% English, 40% Math.
+	Example: 68, 72, 78
+
+18. csubj3_ss3_1st: INT
+	Description: Core subject 3 score for SS3 1st term. Weighted: 50% English, 50% Math.
+	Example: 65, 80, 80
+
+19. csubj3_ss3_2nd: INT
+	Description: Core subject 3 score for SS3 2nd term. Weighted: 40% English, 60% Math.
+	Example: 79, 90, 79
+
+20. csubj3_absences: INT
+	Description: Core subject 3 absences. Weighted: 40% English absences, 60% Math absences.
+	Example: 4, 2, 0
+
+
+__________________________
+Overall Scores and Grades:
+--------------------------
+
+
+1. overall_average: INT
+	Description: Average score across all subjects.
+	Example: 75, 82, 79
+
+2. grade: CHAR(1)
+	Description: Grade based on overall average (A, B, C, D, F).
+	Example: A, B, B
+
+3. waec_grade: VARCHAR(4)
+	Description: WAEC grade indicating PASS or FAIL.
+	Example: PASS, FAIL, PASS
+
+
+__________________________
+Model Additions:
+--------------------------
+
+1. predictions: VARCHAR(4)
+	Description: Displays the predicted class of a student based on current metrics
+	Example: PASS, FAIL.
+
+2. confidence: VARCHAR(4)
+	Description: Displays the percentage of the model's confidence in its prediction.
+	Example: 75%, 91%, 55%, etc.
