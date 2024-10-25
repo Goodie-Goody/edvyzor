@@ -1,0 +1,276 @@
+Workflow Summary
+
+1. Open Supabase Account:
+
+2. Created a new Supabase account and set up a project.
+
+3. Download Dataset from Kaggle
+
+4. Unzip Kaggle File: Unzipped the downloaded Kaggle zip file to extract the CSV files (student-mat.csv and student-por.csv).
+
+5. Import Tables in form of .csv files into Supabase.
+
+6. Regularize Column Names: Converted all column names to lowercase for consistency.
+
+7. Merge Tables: Merged the tables using the following SQL code:
+
+---------------------------------------------------------------------------------------------
+
+CREATE TABLE merged_students AS
+SELECT 
+    d1.*,
+    d2.absences AS por_absences,
+    d2.g1 AS por_G1,
+    d2.g2 AS por_G2,
+    d2.g3 AS por_G3
+FROM 
+    student_mat d1
+JOIN 
+    student_por d2
+ON 
+    d1.school = d2.school
+    AND d1.sex = d2.sex
+    AND d1.age = d2.age
+    AND d1.address = d2.address
+    AND d1.famsize = d2.famsize
+    AND d1.pstatus = d2.Pstatus
+    AND d1.medu = d2.Medu
+    AND d1.fedu = d2.Fedu
+    AND d1.mjob = d2.Mjob
+    AND d1.fjob = d2.Fjob
+    AND d1.reason = d2.reason
+    AND d1.nursery = d2.nursery
+    AND d1.internet = d2.internet;
+
+---------------------------------------------------------------------------------------------
+
+
+8. Add student_id Column: Created a sequence for IDs:
+
+CREATE SEQUENCE student_id_seq START 1;
+Added the student_id column:
+
+---------------------------------------------------------------------------------------------
+
+ALTER TABLE merged_students
+ADD COLUMN student_id INTEGER NOT NULL DEFAULT nextval('student_id_seq');
+
+---------------------------------------------------------------------------------------------
+
+WITH seq AS (
+  SELECT 
+    student_id,
+    nextval('student_id_seq') AS new_id 
+  FROM 
+    merged_students
+)
+UPDATE 
+  merged_students
+SET 
+  student_id = seq.new_id
+FROM 
+  seq
+WHERE 
+  merged_students.student_id IS NULL;
+
+---------------------------------------------------------------------------------------------
+
+9. Delete Dalc and Walc Columns: Removed the Dalc and Walc columns since they might be hard to gauge for future data:
+
+---------------------------------------------------------------------------------------------
+
+ALTER TABLE merged_students
+DROP COLUMN Dalc,
+DROP COLUMN Walc;
+
+---------------------------------------------------------------------------------------------
+
+10. Freeze the student_id column.
+
+11. Multiplied the scores for each term by 5 to scale it a cumulative score of 100 instead of 20
+using the code below
+
+---------------------------------------------------------------------------------------------
+
+UPDATE merged_students
+SET 
+    por_g1 = por_g1 * 5,
+    por_g2 = por_g2 * 5,
+    por_g3 = por_g3 * 5,
+    mat_g1 = mat_g1 * 5,
+    mat_g2 = mat_g2 * 5,
+    mat_g3 = mat_g3 * 5;
+
+---------------------------------------------------------------------------------------------
+
+12. Altered the column names to become more descriptive using this:
+
+---------------------------------------------------------------------------------------------
+
+alter table merged_students
+rename column por_g1 to eng_ss2_3rd;
+
+alter table merged_students
+rename column por_g2 to eng_ss3_1st;
+
+alter table merged_students
+rename column por_g3 to eng_ss3_2nd;
+
+alter table merged_students
+rename column por_absences to eng_absences
+
+alter table merged_students
+rename column mat_g1 to mat_ss2_3rd;
+
+alter table merged_students
+rename column mat_g2 to mat_ss3_1st;
+
+alter table merged_students
+rename column mat_g3 to mat_ss3_2nd;
+
+---------------------------------------------------------------------------------------------
+
+13. Create or Generate new scores for the 3 core subject with weights dynamically given to Maths and English
+scores for that term i.e core subject 1, 2 and 3 had weights of 60/40, 40/60 and 50/50 assigned to maths and english.
+This was to ensure some sort of variability in the the scores.
+
+Example Calculation:
+If a student scores 80 in English and 55 in Maths:
+
+csubj1_ss2_3rd:
+
+Calculation: 0.6 * 80 + 0.4 * 55 = 48 + 22 = 70 (rounded to nearest integer):
+
+---------------------------------------------------------------------------------------------
+
+-- Add new columns for core subject scores with INT type
+ALTER TABLE merged_students
+ADD COLUMN csubj1_ss2_3rd INT,
+ADD COLUMN csubj1_ss3_1st INT,
+ADD COLUMN csubj1_ss3_2nd INT,
+ADD COLUMN csubj2_ss2_3rd INT,
+ADD COLUMN csubj2_ss3_1st INT,
+ADD COLUMN csubj2_ss3_2nd INT,
+ADD COLUMN csubj3_ss2_3rd INT,
+ADD COLUMN csubj3_ss3_1st INT,
+ADD COLUMN csubj3_ss3_2nd INT;
+
+-- Populate columns with custom weights
+UPDATE merged_students
+SET 
+    csubj1_ss2_3rd = ROUND(0.6 * eng_ss2_3rd + 0.4 * mat_ss2_3rd),
+    csubj1_ss3_1st = ROUND(0.6 * eng_ss3_1st + 0.4 * mat_ss3_1st),
+    csubj1_ss3_2nd = ROUND(0.6 * eng_ss3_2nd + 0.4 * mat_ss3_2nd),
+    csubj2_ss2_3rd = ROUND(0.4 * eng_ss2_3rd + 0.6 * mat_ss2_3rd),
+    csubj2_ss3_1st = ROUND(0.4 * eng_ss3_1st + 0.6 * mat_ss3_1st),
+    csubj2_ss3_2nd = ROUND(0.4 * eng_ss3_2nd + 0.6 * mat_ss3_2nd),
+    csubj3_ss2_3rd = ROUND(0.5 * eng_ss2_3rd + 0.5 * mat_ss2_3rd),
+    csubj3_ss3_1st = ROUND(0.5 * eng_ss3_1st + 0.5 * mat_ss3_1st),
+    csubj3_ss3_2nd = ROUND(0.5 * eng_ss3_2nd + 0.5 * mat_ss3_2nd);
+
+---------------------------------------------------------------------------------------------
+
+14. Calculate averages for each subject in new columns:
+
+---------------------------------------------------------------------------------------------
+
+-- Add new columns for subject averages
+ALTER TABLE merged_students
+ADD COLUMN mat_average INT,
+ADD COLUMN eng_average INT,
+ADD COLUMN csubj1_average INT,
+ADD COLUMN csubj2_average INT,
+ADD COLUMN csubj3_average INT;
+
+-- Populate columns with the calculated averages
+UPDATE merged_students
+SET 
+    mat_average = ROUND((mat_ss2_3rd + mat_ss3_1st + mat_ss3_2nd) / 3),
+    eng_average = ROUND((eng_ss2_3rd + eng_ss3_1st + eng_ss3_2nd) / 3),
+    csubj1_average = ROUND((csubj1_ss2_3rd + csubj1_ss3_1st + csubj1_ss3_2nd) / 3),
+    csubj2_average = ROUND((csubj2_ss2_3rd + csubj2_ss3_1st + csubj2_ss3_2nd) / 3),
+    csubj3_average = ROUND((csubj3_ss2_3rd + csubj3_ss3_1st + csubj3_ss3_2nd) / 3);
+
+
+---------------------------------------------------------------------------------------------
+
+15. Created an average of all the averages column and a score grade based on the aforementioned column.
+
+---------------------------------------------------------------------------------------------
+
+-- Add new columns for overall average and grade
+ALTER TABLE merged_students
+ADD COLUMN overall_average INT,
+ADD COLUMN grade CHAR(1);
+
+-- Calculate overall average and assign grades
+UPDATE merged_students
+SET 
+    overall_average = ROUND((mat_average + eng_average + csubj1_average + csubj2_average + csubj3_average) / 5),
+    grade = CASE
+                WHEN ROUND((mat_average + eng_average + csubj1_average + csubj2_average + csubj3_average) / 5) >= 70 THEN 'A'
+                WHEN ROUND((mat_average + eng_average + csubj1_average + csubj2_average + csubj3_average) / 5) >= 60 THEN 'B'
+                WHEN ROUND((mat_average + eng_average + csubj1_average + csubj2_average + csubj3_average) / 5) >= 50 THEN 'C'
+                WHEN ROUND((mat_average + eng_average + csubj1_average + csubj2_average + csubj3_average) / 5) >= 40 THEN 'D'
+                ELSE 'F'
+            END;
+
+
+---------------------------------------------------------------------------------------------
+
+16. Create a waec_grade column where I generate the pass based on certain criteria met in the score_grade column:
+Used the following code to achieve my goal.
+
+---------------------------------------------------------------------------------------------
+
+-- Add the waec_grade column as VARCHAR
+
+ALTER TABLE merged_students
+ADD COLUMN waec_grade VARCHAR(4);
+
+-- Mark A, B, and C grades as PASS
+
+UPDATE merged_students
+SET waec_grade = 'PASS'
+WHERE grade IN ('A', 'B', 'C');
+
+-- Identify the top 10% of D grades and mark them as PASS
+
+WITH ranked_d_students AS (
+    SELECT student_id,
+           grade,
+           overall_average,
+           ROW_NUMBER() OVER (ORDER BY overall_average DESC) AS rank,
+           COUNT(*) OVER () AS total
+    FROM merged_students
+    WHERE grade = 'D'
+)
+
+UPDATE merged_students
+SET waec_grade = 'PASS'
+FROM ranked_d_students
+WHERE merged_students.student_id = ranked_d_students.student_id
+AND ranked_d_students.rank <= CEIL(ranked_d_students.total * 0.1);
+
+-- Mark the remaining D grades and all F grades as FAIL
+
+UPDATE merged_students
+
+---------------------------------------------------------------------------------------------
+
+17. Add the absences for the core subjects:
+
+---------------------------------------------------------------------------------------------
+
+ALTER TABLE merged_students
+ADD COLUMN csubj1_absences INT,
+ADD COLUMN csubj2_absences INT,
+ADD COLUMN csubj3_absences INT;
+
+UPDATE merged_students
+SET 
+    csubj1_absences = ROUND(0.6 * eng_absences + 0.4 * mat_absences),
+    csubj2_absences = ROUND(0.5 * eng_absences + 0.5 * mat_absences),
+    csubj3_absences = ROUND(0.4 * eng_absences + 0.6 * mat_absences);
+
+---------------------------------------------------------------------------------------------
