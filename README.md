@@ -36,7 +36,7 @@ cd waec-prediction
 
 1. [Open a Supabase account](https://supabase.io/).
 2. Upload the data and perform the necessary data transformations.
-   - **Note**: Link to specific transformation instructions if needed.
+   - **Note**: [Link to specific transformation instructions if needed.](workflow-supabase.txt)
 3. Copy your Supabase URL and Service Role Key credentials.
 
 ## 3. Jupyter Notebook Configuration
@@ -113,11 +113,8 @@ Use Power BI to create visualizations and embed them using the Power BI service.
 - **Interactive Interface**: Deploy models and interact with data using Streamlit deployed on Fly.io.
 - **Dynamic Visualization**: Visualize data and predictions in Power BI.
 
-### Contributing
-We welcome contributions! Please read our contribution guidelines before submitting a pull request.
-
 ### License
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the LICENSE file for [details](LICENSE).
 
 ### Acknowledgements
-A big thank you to everyone who has contributed to this project and to the tools we used: Supabase, Jupyter Notebook, Streamlit, and Power BI.
+A big thank you to everyone who has contributed to this project and to the creators of the tools we used: Supabase, Jupyter Notebook, Scikit-Learn, Python, Streamlit, and Power BI.
